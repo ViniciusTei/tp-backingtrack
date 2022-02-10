@@ -10,10 +10,14 @@
     - [x] regra da luta: verificar valores de P do Ness e do inimigo, caso P for maior Ness vence caso P for menor verifica se o K do Ness eh maior q 0, entao ele vence, se nao ele perde.
     - [x] atualizar os valores de Ness para cada acao anterior
 - [x] criar estruturas de dados do mapa
-- [ ] fazer algoritmo de movimentar (criar movimentar.c na pasta do mapa)
-  - [ ] implementar algoritmo de backingtrack
+- [x] fazer algoritmo de movimentar (criar movimentar.c na pasta do mapa)
+  - [x] implementar algoritmo de backingtrack
   - [x] implementar regras de movimentacao de acordo com os caracteres especiais
 - [ ] terminar de implemtar leitura de arquivo para inicializar as etruturas
+- [ ] implementar modo debugger (modo de analise)
+- [ ] implementar print com cores
+- [ ] criar novos casos de teste
+- [ ] comentar codigo e refatorar para simplificar o entendimento
 
 Uma implementacao generica de backingtrack
 
