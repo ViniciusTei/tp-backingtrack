@@ -1,4 +1,5 @@
 #include "../../include/movimenta/movimenta.h"
+#include "../../include/colors/colors.h"
 
 void encontraPosicaoInicial(Mapa *mapa, Posicao *posicaoEncontrada) {
 
@@ -19,9 +20,13 @@ void movimenta(Mapa *mapa, ListaPersonagens *personagens) {
   Posicao posicaoInicial;
 
   encontraPosicaoInicial(mapa, &posicaoInicial);
+  yellow();
+  printf("\nlinha: %d, coluna %d; ", posicaoInicial.x, posicaoInicial.y);
+  reset();
 
-  printf("linha: %d, coluna %d; ", posicaoInicial.x, posicaoInicial.y);
+  purple();
   imprimeNessStatus(personagens->Ness);
+  reset();
 
   //comecamos verificando as linhas
 
@@ -104,22 +109,33 @@ int fazMovimento(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInici
     // o metodo luta comeca verificando se eh um inimigo valido caso contrario
     // devemos mover para outra posicao valida
     if (resultadoLuta > 0) {
+      yellow();
       printf("\nLinha: %d, Coluna %d; ", proximaPosicao.x, proximaPosicao.y);
+      reset();
+
+      purple();
       imprimeNessStatus(personagens->Ness);
+      reset();
 
       if (inimigo == 'G') {
+        green();
         printf("\nParabens voce derrotou Giygas!");
+        reset();
         return 0;
       }
 
       return 1;
     } else if (resultadoLuta == 0) {
       //printf("\nEsse caminho deu ruim");
+      yellow();
       printf("\nLinha: %d, Coluna %d; ", proximaPosicao.x, proximaPosicao.y);
+      reset();
 
       return -1;
     } else {
+      yellow();
       printf("\nLinha: %d, Coluna %d; ", proximaPosicao.x, proximaPosicao.y);
+      reset();
       // vai para a proxima posicao valida
       //backingtrack(mapa, personagens, proximaPosicao);
       return 1;

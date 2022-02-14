@@ -7,7 +7,24 @@ void iniciaListaInimigos(ListaPersonagens *lista) {
 
 void imprimeListaInimigos(ListaPersonagens lista) {
   for (int i = 0; i < lista.ultimoInimigo; i++) {
-    printf("Inimigo %c -> P: %d | K: %d\n", lista.inimigos[i].name, lista.inimigos[i].p, lista.inimigos[i].k);
+    printf("\nInimigo %s -> P: %d | K: %d\n", retornaNomeInimigo(lista.inimigos[i].name), lista.inimigos[i].p, lista.inimigos[i].k);
+  }
+}
+
+char* retornaNomeInimigo(char inicial) {
+  switch(inicial) {
+    case 'U':
+      return "Li’l UFO";
+    case 'T':
+      return "Territorial Oak";
+    case 'S':
+      return "Starman Junior";
+    case 'B':
+      return "Master Belch";
+    case 'G':
+      return "Giygas";
+    default:
+      return "";
   }
 }
 
@@ -31,7 +48,7 @@ void iniciaNess(ListaPersonagens *lista, int P, int K) {
   * 
   */
 void imprimeNessStatus(PersonagemData Ness) {
-  printf("P: %d, K: %d", Ness.p, Ness.k);
+  printf("\nNess Status:\n    P:%d, K:%d", Ness.p, Ness.k);
 }
 
 void iniciaMonstro(ListaPersonagens *lista, int P, int K, int Monstro) {

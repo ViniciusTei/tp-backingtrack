@@ -1,59 +1,65 @@
-// #include "../../include/core/readFile.h"
+#include "../../include/core/readFile.h"
 
-// void RemoveChar(char* str, char c) {
-//     char *pr= str, *pw = str;
+void RemoveChar(char* str, char c) {
+    char *pr= str, *pw = str;
 
-//     while(*pr)
-//     {
-//         *pw = *pr++;
-//         pw += (*pw != c);
-//     }
+    while(*pr)
+    {
+        *pw = *pr++;
+        pw += (*pw != c);
+    }
 
-//     *pw = '\0';
-// }
+    *pw = '\0';
+}
 
-// int ReadFile(char* file_name, ListaInimigos *inimigos) {
-//   FILE *file;
-//   char linha[100], *pLinha, *pChar;
-//   char P[4], K[4];
-//   file = fopen(file_name, "r");
+int ReadFile(char* file_name, ListaPersonagens *personagens, Mapa *mapa) {
+  FILE *file;
+  char *linha, *pLinha, *pChar;
+  int P, K;
+  file = fopen(file_name, "r");
   
-//   int fileCurrentLine = 0;
+  int fileCurrentLine = 0;
 
-//   if(file == NULL)
-//     {
-//         printf("Erro ao abrir o arquivo!\n");
-//         return 0;
-//     }
-//     else
-//     {
-//       fscanf(file, "%s %s", P, K);
-//       Ness.p = strtol(P, NULL, 10);
-//       Ness.k = strtol(K, NULL, 10);
-//       Ness.name = 'N';
-//       for (int i = 0; i < 5; i++) {
-        
-//         fscanf(file, "%s %s", P, K);
-//         inimigos->inimigos[i].p = strtol(P, NULL, 10);
-//         inimigos->inimigos[i].k = strtol(K, NULL, 10);
-        
-//         if (i == 0) {
-//           inimigos->inimigos[i].name = 'U';
-//         }
-//         if (i == 1) {
-//           inimigos->inimigos[i].name = 'T';
-//         }
-//         if (i == 2) {
-//           inimigos->inimigos[i].name = 'S';
-//         }
-//         if (i == 3) {
-//           inimigos->inimigos[i].name = 'B';
-//         }
-//         if (i == 4) {
-//           inimigos->inimigos[i].name = 'G';
-//         }
-//       }
+  if(file == NULL)
+    {
+        printf("Erro ao abrir o arquivo!\n");
+        return 0;
+    }
+    else
+    {
+      // ler dados do ness
+      fscanf(file, "%d %d", &P, &K);
+      iniciaNess(personagens, P, K);
 
-//     }
-//   return 0;
-// }
+      //ler dados dos inimigos
+      for (int i = 0; i < NUM_INIMIGOS; i++) {
+        
+        fscanf(file, "%d %d", &P, &K);
+        iniciaMonstro(personagens, P, K, i);
+      }
+
+      //ler os dados do mapa
+      int altura, largura, indexAltura, indexLargura;
+
+      fscanf(file, "%d %d", &altura, &largura);
+      
+      iniciaMapa(mapa, altura, largura);
+      
+      linha = fgets(linha, sizeof(linha), file);
+
+      while(linha != NULL) {
+        for(indexLargura = 0; indexLargura < strlen(linha); indexLargura++) {
+          defineCharNaPosicao(mapa, linha[indexLargura], indexAltura, indexLargura);
+        }
+
+        //pega proxima linha
+        linha = fgets(linha, sizeof(linha), file);
+        indexAltura++;
+      }
+      
+
+      return 1;
+
+    }
+  return 0;
+}

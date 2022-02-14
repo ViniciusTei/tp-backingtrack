@@ -1,43 +1,22 @@
 #include "../../include/movimenta/movimenta.h"
+#include "../../include/core/lerArquivo.h"
 
 int main(void) {
   ListaPersonagens personagens;
   Mapa mapa;
-  char mapTest[7][10] = {
-    {'U', '-', '+', '.', '.', '.', '+', '-', '-', '+'},
-    {'|', '.', '@', '.', '.', '.', '|', '.', '.', '|'},
-    {'+', '-', '+', '-', 'U', '-', '+', '.', '.', 'S'},
-    {'|', '.', '|', '.', '.', '.', 'B', '.', '.', '|'},
-    {'S', '.', '|', '.', '.', '.', 'G', 'S', '-', '+'},
-    {'|', '.', '|', '.', '.', '.', '.', '.', '.', '|'},
-    {'+', '-', 'T', '-', '-', '-', '-', '-', '-', '+'},
-  };
 
-  iniciaListaInimigos(&personagens);
-  // U, T, S, B e G.
-  //ReadFile("entrada.txt", &inimigos);
-  // imprimeListaInimigos(inimigos);
-  iniciaNess(&personagens, 20, 2);
-  //imprimeNessStatus(personagens.Ness);
-  iniciaMonstro(&personagens, 10, 5, 0);
-  iniciaMonstro(&personagens, 25, 10, 1);
-  iniciaMonstro(&personagens, 30, 15, 2);
-  iniciaMonstro(&personagens, 40, 20, 3);
-  iniciaMonstro(&personagens, 80, 0, 4);
-  //imprimeListaInimigos(personagens);
+  int controle = lerArquivo("entrada.txt", &personagens, &mapa);
 
-  // luta(&personagens, 'T');
-  // imprimeNessStatus(personagens.Ness);
-
-  iniciaMapa(&mapa, 7, 10);
-
-  for (int i = 0; i < 7; i++) {
-    for (int j = 0; j < 10; j++) {
-      mapa.mapa[i][j] = mapTest[i][j];
-    }
-  }
+  if (controle == 1) {
+    imprimeNessStatus(personagens.Ness);
+    imprimeListaInimigos(personagens);
+    imprimeMapa(mapa);
   
-  imprimeMapa(mapa);
+  } else {
+    red();
+    printf("\nErro na leitura\n");
+    reset();
+  }  
 
   movimenta(&mapa, &personagens);
   

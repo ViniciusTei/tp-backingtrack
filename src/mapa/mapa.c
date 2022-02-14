@@ -16,6 +16,7 @@ void iniciaMapa(Mapa *mapa, int A, int L) {
 }
 
 void imprimeMapa(Mapa mapa) {
+  printf("\n");
   for (int i = 0; i < mapa.altura; i++) {
     for (int j = 0; j < mapa.largura; j++) {
       printf("%c ", mapa.mapa[i][j]);

@@ -13,10 +13,12 @@
 - [x] fazer algoritmo de movimentar (criar movimentar.c na pasta do mapa)
   - [x] implementar algoritmo de backingtrack
   - [x] implementar regras de movimentacao de acordo com os caracteres especiais
-- [ ] terminar de implemtar leitura de arquivo para inicializar as etruturas
+- [x] terminar de implemtar leitura de arquivo para inicializar as etruturas
 - [ ] implementar modo debugger (modo de analise)
-- [ ] implementar print com cores
-- [ ] criar novos casos de teste
+- [x] implementar print com cores
+- [x] criar novos casos de teste
+  - [ ] corrigir bugs para os novos casos de testes
+  - [ ] criar um terceiro caso de teste
 - [ ] comentar codigo e refatorar para simplificar o entendimento
 
 Uma implementacao generica de backingtrack

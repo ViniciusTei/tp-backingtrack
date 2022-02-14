@@ -9,6 +9,9 @@ int luta(ListaPersonagens *lista, char Inimigo) {
     return -1;
   }
 
+  red();
+  printf("\nNess luta com %s", retornaNomeInimigo(lista->inimigos[inimigoIndex].name));
+  reset();
   // verifica se o valor de p do ness eh suficiente para ganhar
   if (lista->Ness.p > lista->inimigos[inimigoIndex].p) {
     // printf("Batalha vencida!\n");
