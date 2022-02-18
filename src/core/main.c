@@ -1,32 +1,33 @@
-#include "../../include/movimenta/movimenta.h"
 #include "../../include/core/lerArquivo.h"
+#include "../../include/movimenta/movimenta.h"
 
-int main(void) {
+int main(int argc, char **argv) {
   ListaPersonagens personagens;
   Mapa mapa;
-  Analise variaveis_analise;
   Posicao posicaoInicial;
+  
+  iniciaArgumentosAnalise(&variaveis_analise, &argumentos, argc, argv);
 
-  variaveis_analise.auxNivelMaximoRecursao = 0;
-  variaveis_analise.chamadasRecursivas = 0;
-  variaveis_analise.nivelMaximoRecursao = 0;
-
-  int controle = lerArquivo("entrada-4.txt", &personagens, &mapa);
+  int controle = lerArquivo(argumentos.nome_arquivo, &personagens, &mapa);
   
   if (controle != 1) {
     red();
     printf("\nErro na leitura\n");
     reset();
-  } 
+    return 0;
+  }
 
+  // calcula tempo de execucao do programa 
+  time(&tempo_inicio);
   movimenta(&mapa, &personagens, &variaveis_analise);
+  time(&tempo_fim);
+  tempo_gasto = tempo_fim - tempo_inicio;
 
-  sleep(2);
-  yellow();
-  printf("\n\nResultados da analise\n");
-  printf("Chamadas recursivas: %d\n", variaveis_analise.chamadasRecursivas);
-  printf("Nivel maximo da recursao: %d\n", variaveis_analise.nivelMaximoRecursao);
-  reset();
+  if (argumentos.MODO_ANALISE == 1) {
+    imprimeAnalise();
+  }
+
+  printf("\n");
   
   return 0;
 }

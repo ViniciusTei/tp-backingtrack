@@ -20,7 +20,10 @@ void encontraPosicaoInicial(Mapa *mapa, Posicao *posicaoEncontrada) {
 void imprimeStatusAtualMovimento(Mapa *mapa, PersonagemData Ness) {
   mapaGrafico(*mapa);
   imprimeNessStatus(Ness);
-  sleep(1);
+
+  if (argumentos.MODO_VISUALIZACAO == 1) {
+    sleep(1);
+  }
 }
 
 // inicia nosso movimento pelo mapa

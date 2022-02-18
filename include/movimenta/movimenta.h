@@ -3,17 +3,12 @@
 
 #include "../mapa/mapa.h"
 #include "../luta/luta.h"
+#include "../core/analise.h"
 
 typedef struct Posicao {
   int x;
   int y;
 } Posicao;
-
-typedef struct Analise {
-  int chamadasRecursivas;
-  int nivelMaximoRecursao; // otaldo pico
-  int auxNivelMaximoRecursao;
-} Analise;
 
 void encontraPosicaoInicial(Mapa *mapa, Posicao *posicaoEncontrada);
 void movimenta(Mapa *mapa, ListaPersonagens *personagens, Analise *var_analise);
