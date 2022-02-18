@@ -14,11 +14,11 @@
   - [x] implementar algoritmo de backingtrack
   - [x] implementar regras de movimentacao de acordo com os caracteres especiais
 - [x] terminar de implemtar leitura de arquivo para inicializar as etruturas
-- [ ] implementar modo debugger (modo de analise)
 - [x] implementar print com cores
 - [x] criar novos casos de teste
-  - [ ] corrigir bugs para os novos casos de testes
-  - [ ] criar um terceiro caso de teste
+  - [x] criar um terceiro caso de teste
+  - [x] corrigir bugs para os novos casos de testes
+- [x] implementar modo debugger (modo de analise)
 - [ ] comentar codigo e refatorar para simplificar o entendimento
 
 Uma implementacao generica de backingtrack
@@ -33,9 +33,3 @@ Uma implementacao generica de backingtrack
           backtrack(filho)
   }
 ```
-
-Nosso problema
-
-- enquanto Ness estiver ganhando lutas e nao estiver ganhado do Gygas continua andando
-- se Ness perde uma luta, volta (backingtrack) para a ultima casa valida
-- deve seguir as regras de movimentacao de cada bloco

@@ -1,6 +1,7 @@
 #include "../../include/movimenta/movimenta.h"
-#include "../../include/colors/colors.h"
 
+
+// Percorre todo o mapa ate encontrar o carctere que representa nosso personagem
 void encontraPosicaoInicial(Mapa *mapa, Posicao *posicaoEncontrada) {
 
   for(int i = 0; i < mapa->altura; i++) {
@@ -16,27 +17,48 @@ void encontraPosicaoInicial(Mapa *mapa, Posicao *posicaoEncontrada) {
 
 }
 
-void movimenta(Mapa *mapa, ListaPersonagens *personagens) {
+void imprimeStatusAtualMovimento(Mapa *mapa, PersonagemData Ness) {
+  mapaGrafico(*mapa);
+  imprimeNessStatus(Ness);
+  sleep(1);
+}
+
+// inicia nosso movimento pelo mapa
+void movimenta(Mapa *mapa, ListaPersonagens *personagens, Analise *var_analise) {
   Posicao posicaoInicial;
 
   encontraPosicaoInicial(mapa, &posicaoInicial);
-  yellow();
-  printf("\nlinha: %d, coluna %d; ", posicaoInicial.x, posicaoInicial.y);
-  reset();
+  atribuiPosicaoNess(mapa, posicaoInicial.x, posicaoInicial.y);
 
-  purple();
-  imprimeNessStatus(personagens->Ness);
-  reset();
+  //imprimeNessStatus(personagens->Ness);
 
+  //imprimePosicao(posicaoInicial);
   //comecamos verificando as linhas
 
-  backingtrack(mapa, personagens, posicaoInicial);
+  int resultado = backingtrack(mapa, personagens, posicaoInicial, posicaoInicial, var_analise);
   
+  if (resultado < 0) {
+    cyan();
+    printf("\nNess nao foi capaz de derrotar o grande Giygas\n\n");
+    reset();
+  }
+
 }
 
-int backingtrack(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInicial) {
+int backingtrack(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInicial, Posicao proximaPosicao, Analise *var_analise) {
   int resultado;
-  Posicao proximaPosicao = posicaoInicial;
+  // Auxiliares para quando voltar no tempo utilizando backtracking os status de personagens assim como mapa e posição devem estar guardados
+  Mapa mapaAtual = *mapa;
+  ListaPersonagens listaAtual = *personagens;
+  // printf("\nINICIO");
+  // printf("\nNess personagens %d",personagens->Ness.p);
+  // printf("\nNess listaAtual %d",listaAtual.Ness.p);
+
+  (*var_analise).chamadasRecursivas++;
+  (*var_analise).auxNivelMaximoRecursao++;
+  if ((*var_analise).nivelMaximoRecursao < (*var_analise).auxNivelMaximoRecursao) {
+    (*var_analise).nivelMaximoRecursao = (*var_analise).auxNivelMaximoRecursao;
+  }
 
   // tenta andar pra direita
   proximaPosicao.y += 1;
@@ -45,13 +67,27 @@ int backingtrack(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInici
   //confere resultado
   if (resultado == 1) {
     // printf("\n X: %d, Y: %d\n",proximaPosicao.x, proximaPosicao.y);
-    int res = backingtrack(mapa, personagens, proximaPosicao);
-
+    if(mapa->mapa[posicaoInicial.x][posicaoInicial.y].ch != '+'){
+      mapa->mapa[posicaoInicial.x][posicaoInicial.y].enable = FALSE;
+    }
+    imprimeStatusAtualMovimento(mapa, personagens->Ness);
+    atribuiPosicaoNess(mapa, proximaPosicao.x, proximaPosicao.y);
+    int res = backingtrack(mapa, personagens, proximaPosicao, proximaPosicao, var_analise);
+    if(personagens->Ness.p != listaAtual.Ness.p){
+      // printf("\nDireita");
+      // printf("\nNess personagens %d",personagens->Ness.p);
+      // printf("\nNess listaAtual %d",listaAtual.Ness.p);
+      *personagens = listaAtual;
+    }
+    mapa->mapa[posicaoInicial.x][posicaoInicial.y].enable = TRUE;
+    atribuiPosicaoNess(mapa, posicaoInicial.x, posicaoInicial.y);
+    (*var_analise).auxNivelMaximoRecursao--;
     if (res == 0) return 0;
+     //Atribui valores iniciais as estruturas para que a volta no tempo ocorra de uma boa maneira
+    imprimeStatusAtualMovimento(mapa, personagens->Ness);
   }else if(resultado == 0){
     return 0;
   }
-  //volta o que foi andado
   proximaPosicao.y -= 1;
   //Proxima posição de teste
   proximaPosicao.x += 1;
@@ -60,14 +96,28 @@ int backingtrack(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInici
   //confere resultado
   if (resultado == 1) {
     // printf("\n X: %d, Y: %d\n",proximaPosicao.x, proximaPosicao.y);
-    int res = backingtrack(mapa, personagens, proximaPosicao);
-
+    if(mapa->mapa[posicaoInicial.x][posicaoInicial.y].ch != '+'){
+      mapa->mapa[posicaoInicial.x][posicaoInicial.y].enable = FALSE;
+    }
+    atribuiPosicaoNess(mapa, proximaPosicao.x, proximaPosicao.y);
+    imprimeStatusAtualMovimento(mapa, personagens->Ness);
+    int res = backingtrack(mapa, personagens, proximaPosicao, proximaPosicao, var_analise);
+    if(personagens->Ness.p != listaAtual.Ness.p){
+      // printf("\nBaixo");
+      // printf("\nNess personagens %d",personagens->Ness.p);
+      // printf("\nNess listaAtual %d",listaAtual.Ness.p);
+      *personagens = listaAtual;
+    }
+    mapa->mapa[posicaoInicial.x][posicaoInicial.y].enable = TRUE;
+    atribuiPosicaoNess(mapa, posicaoInicial.x, posicaoInicial.y);
+    (*var_analise).auxNivelMaximoRecursao--;
     if (res == 0) return 0;
+     //Atribui valores iniciais as estruturas para que a volta no tempo ocorra de uma boa maneira
+    imprimeStatusAtualMovimento(mapa, personagens->Ness);
   }else if(resultado == 0){
     return 0;
   }
-  //volta posição
-  proximaPosicao.x -= 1;
+ proximaPosicao.x -= 1;
   // Proxima posição de teste
   proximaPosicao.y -= 1;
   // verifica se o movimento eh valido para esquerda
@@ -75,13 +125,28 @@ int backingtrack(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInici
   //confere resultado
   if (resultado == 1) {
     // printf("\n X: %d, Y: %d\n",proximaPosicao.x, proximaPosicao.y);
-    int res = backingtrack(mapa, personagens, proximaPosicao);
-
+    if(mapa->mapa[posicaoInicial.x][posicaoInicial.y].ch != '+'){
+      mapa->mapa[posicaoInicial.x][posicaoInicial.y].enable = FALSE;
+    }
+    atribuiPosicaoNess(mapa, proximaPosicao.x, proximaPosicao.y);
+    imprimeStatusAtualMovimento(mapa, personagens->Ness);
+    int res = backingtrack(mapa, personagens, proximaPosicao, proximaPosicao, var_analise);
+    if(personagens->Ness.p != listaAtual.Ness.p){
+      // printf("\nEsquerda");
+      // printf("\nNess personagens %d",personagens->Ness.p);
+      // printf("\nNess listaAtual %d",listaAtual.Ness.p);
+      *personagens = listaAtual;
+      // printf("\nNess personagens %d",personagens->Ness.p);
+    }
+    mapa->mapa[posicaoInicial.x][posicaoInicial.y].enable = TRUE;
+    atribuiPosicaoNess(mapa, posicaoInicial.x, posicaoInicial.y);
+    (*var_analise).auxNivelMaximoRecursao--;
     if (res == 0) return 0;
+     //Atribui valores iniciais as estruturas para que a volta no tempo ocorra de uma boa maneira
+    imprimeStatusAtualMovimento(mapa, personagens->Ness);
   }else if(resultado == 0){
     return 0;
   }
-  //Volta posição
   proximaPosicao.y += 1;
   // tenta andar pra cima
   proximaPosicao.x -= 1;
@@ -90,99 +155,111 @@ int backingtrack(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInici
   //confere resultado
   if (resultado == 1) {
     // printf("\n X: %d, Y: %d\n",proximaPosicao.x, proximaPosicao.y);
-    int res = backingtrack(mapa, personagens, proximaPosicao);
-
+    if(mapa->mapa[posicaoInicial.x][posicaoInicial.y].ch != '+'){
+      mapa->mapa[posicaoInicial.x][posicaoInicial.y].enable = FALSE;
+    }
+    atribuiPosicaoNess(mapa, proximaPosicao.x, proximaPosicao.y);
+    imprimeStatusAtualMovimento(mapa, personagens->Ness);
+    int res = backingtrack(mapa, personagens, proximaPosicao, proximaPosicao, var_analise);
+    if(personagens->Ness.p != listaAtual.Ness.p){
+      // printf("\nAcima");
+      // printf("\nNess personagens %d",personagens->Ness.p);
+      // printf("\nNess listaAtual %d",listaAtual.Ness.p);
+      *personagens = listaAtual;
+    }
+    
+    mapa->mapa[posicaoInicial.x][posicaoInicial.y].enable = TRUE;
+    atribuiPosicaoNess(mapa, posicaoInicial.x, posicaoInicial.y);
+    (*var_analise).auxNivelMaximoRecursao--;
     if (res == 0) return 0;
+     //Atribui valores iniciais as estruturas para que a volta no tempo ocorra de uma boa maneira
+    imprimeStatusAtualMovimento(mapa, personagens->Ness);
   }else if(resultado == 0){
     return 0;
   }
   return -1;
 }
 
+
+ /** 
+  * int fazMovimento(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInicial, Posicao proximaPosicao)
+  * 
+  *    Essa funcao faz toda a logica do movimento, comecando verificando se eh um
+  *    movimento valido. So entao verificamos se temos um inimgo para lutar, e fazemos
+  *    o retorno do resultado da acao de movimento.
+  * 
+  * Parameters   : mapa: Mapa info
+  *                personagens: personagens info
+  *                posicaoInicial: posicao da qual queremos partir
+  *                proximaPosicao: posicao que queremos chegar
+  * Return Value : 0: lutamos e perdemos ou ganhamos do giygas.
+  *                1: lutamos e ganhamos ou apenas avanacamos 
+  *               -1: caminho invalido 
+  * 
+  */
 int fazMovimento(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInicial, Posicao proximaPosicao) {
-  int movimento = verificaMovimentoValido(*mapa, posicaoInicial, proximaPosicao);
-  if (movimento > 0) {
-    //pegamos o valor daquela posicao no mapa para sabermos se eh um inimgo
-    char inimigo = verificaSePosicaoTemInimigo(*mapa, proximaPosicao);
+  if (verificaMovimentoValido(*mapa, posicaoInicial, proximaPosicao) > 0) {
+    //imprimePosicao(proximaPosicao);
+    //sleep(1);
+    //mapaGrafico(*mapa);
+    // se a posicao nao for um inimigo nos vamos para a proxima posicao valida
+    if (verificaSePosicaoTemInimigo(*mapa, proximaPosicao) == FALSE) return 1;
+    
+    char inimigo = getPosicao(*mapa, proximaPosicao.x, proximaPosicao.y);
     int resultadoLuta = luta(personagens, inimigo);
+    //sleep(1);
+    //imprimeNessStatus(personagens->Ness);
 
-    // o metodo luta comeca verificando se eh um inimigo valido caso contrario
-    // devemos mover para outra posicao valida
-    if (resultadoLuta > 0) {
-      yellow();
-      printf("\nLinha: %d, Coluna %d; ", proximaPosicao.x, proximaPosicao.y);
+    if (inimigo == 'G' && resultadoLuta == 1) {
+      green();
+      printf("\nParabens voce derrotou Giygas!");
       reset();
-
-      purple();
-      imprimeNessStatus(personagens->Ness);
-      reset();
-
-      if (inimigo == 'G') {
-        green();
-        printf("\nParabens voce derrotou Giygas!");
-        reset();
-        return 0;
-      }
-
-      return 1;
-    } else if (resultadoLuta == 0) {
-      //printf("\nEsse caminho deu ruim");
-      yellow();
-      printf("\nLinha: %d, Coluna %d; ", proximaPosicao.x, proximaPosicao.y);
-      reset();
-
-      return -1;
-    } else {
-      yellow();
-      printf("\nLinha: %d, Coluna %d; ", proximaPosicao.x, proximaPosicao.y);
-      reset();
-      // vai para a proxima posicao valida
-      //backingtrack(mapa, personagens, proximaPosicao);
-      return 1;
+      return 0;
     }
-  } else {
-    //printf("\nLinha: %d, Colunha %d; Nao foi possivel ir para esse caminho!", proximaPosicao.x, proximaPosicao.y);
-
-    return -1;
-  }
+    return resultadoLuta;
+  } 
+  
+  // movimento invalido
+  return -1;
 }
 
-char verificaSePosicaoTemInimigo(Mapa mapa, Posicao p) {
-  return mapa.mapa[p.x][p.y];
+void imprimePosicao(Posicao p) {
+  yellow();
+  printf("\nLinha: %d, Coluna %d; ", p.x, p.y);  
+  reset();
+}
+
+int verificaSePosicaoTemInimigo(Mapa mapa, Posicao p) {
+  char pos = getPosicao(mapa, p.x, p.y);
+  
+  if(pos == '.' || pos == '+' || pos == '|' || pos == '-'|| pos == '@') 
+    return FALSE;
+
+  return TRUE;
 }
 
 int verificaMovimentoValido(Mapa mapa, Posicao posicaoAtual, Posicao proximaPosicao) {
+  
   // nao pode seguir para fora do mapa
-  if(proximaPosicao.x > mapa.altura || proximaPosicao.x < 0) {
-    //printf("\n Fora do mapa");
-    return -1;
-  }
+  if(proximaPosicao.x >= mapa.altura || proximaPosicao.x < 0) return -1;
+  if(proximaPosicao.y >= mapa.largura || proximaPosicao.y < 0) return -1;
 
-  if(proximaPosicao.y > mapa.largura || proximaPosicao.y < 0) {
-    //printf("\n Fora do mapa");
-    return -1;
-  }
+  // nao pode voltar por um caminho que ja passou
+  if(mapa.mapa[proximaPosicao.x][proximaPosicao.y].enable == FALSE) return -1;
 
   // nao pode seguir para uma posicao com um ponto
-   if(mapa.mapa[proximaPosicao.x][proximaPosicao.y] == '.'){
-     //printf("\n Erro x,y: %d,%d",proximaPosicao.x, proximaPosicao.y);
-     //printf("\n Ponto");
-     return -1;
-   }
+  if(getPosicao(mapa, proximaPosicao.x, proximaPosicao.y) == '.') return -1;
+
   // quando eoncontrar um - pode vir apenas de um y valido
-  if(mapa.mapa[proximaPosicao.x][proximaPosicao.y] == '-') {
-    //printf("\n Anda Y");
-    //printf("\n X,Y : %d,%d",proximaPosicao.x, proximaPosicao.y);
+  if(getPosicao(mapa, posicaoAtual.x, posicaoAtual.y) == '-') {
     return (posicaoAtual.y == proximaPosicao.y - 1) || (posicaoAtual.y == proximaPosicao.y + 1);
   }
+  
   // quando econtra um | pode vir de apenas um x valido
-  if(mapa.mapa[proximaPosicao.x][proximaPosicao.y] == '|') {
-    //printf("\n Anda X");
-    //printf("\n X,Y : %d,%d",proximaPosicao.x, proximaPosicao.y);
+  if(getPosicao(mapa, posicaoAtual.x, posicaoAtual.y) == '|') {
     return (posicaoAtual.x == proximaPosicao.x - 1) || (posicaoAtual.x == proximaPosicao.x + 1);
   } 
 
   // quando econtrar um + pode seguir para qualquer direcao
-
   return 1;
 }

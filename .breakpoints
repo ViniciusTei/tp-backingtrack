@@ -1,0 +1,18 @@
+{
+  "files": {
+    "src/movimenta/movimenta.c": [
+      {
+        "id": "3e6cf7da-c348-46cb-97ca-85ecc0fb122c",
+        "line": 211,
+        "version": 7592,
+        "index": 8200
+      },
+      {
+        "id": "8b28b656-086a-42b3-8205-b5e7e0d966c1",
+        "line": 258,
+        "version": 7592,
+        "index": 9576
+      }
+    ]
+  }
+}

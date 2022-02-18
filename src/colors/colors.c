@@ -5,7 +5,7 @@ void black () {
 }
 
 void red () {
-    printf("\033[1;31m");
+    printf("\033[38;2;255;0m");
 }
 
 void green() {
@@ -13,7 +13,7 @@ void green() {
 }
 
 void yellow () {
-    printf("\033[1;33m");
+    printf("\033[38;2;252;255m");
 }
 
 void blue() {
@@ -21,7 +21,7 @@ void blue() {
 }
 
 void purple() {
-    printf("\033[0;35m");
+    printf("\033[38;2;60;0;141m");
 }
 
 void cyan() {
@@ -30,6 +30,22 @@ void cyan() {
 
 void white() {
     printf("\033[0;37m");
+}
+
+void laranja() {
+    printf("\033[38;2;252;127m");
+}
+
+void marrom() {
+    printf("\033[38;2;45;18m");
+}
+
+void rosa() {
+    printf("\033[38;2;255;0;230m");
+}
+
+void bgGray() {
+  printf("\033[48;2;237;237;237m");
 }
 
 // Necessário resetar para cor original

@@ -1,4 +1,5 @@
 #include "../../include/personagem/personagem.h"
+#include "../../include/colors/colors.h"
 
 void iniciaListaInimigos(ListaPersonagens *lista) {
   lista->primeiroInimigo = 0;
@@ -35,10 +36,8 @@ void iniciaNess(ListaPersonagens *lista, int P, int K) {
 }
 
  /** 
-  * 
   * void imprimeNessStatus(PersonagemData Ness) 
   * 
-  *  
   *    Essa funcao mostra os dados do personagem principal
   *    o valor de P e de K.
   * 
@@ -48,7 +47,9 @@ void iniciaNess(ListaPersonagens *lista, int P, int K) {
   * 
   */
 void imprimeNessStatus(PersonagemData Ness) {
-  printf("\nNess Status:\n    P:%d, K:%d", Ness.p, Ness.k);
+  laranja();
+  printf("\nNess Status -> P:%d, K:%d", Ness.p, Ness.k);
+  reset();
 }
 
 void iniciaMonstro(ListaPersonagens *lista, int P, int K, int Monstro) {

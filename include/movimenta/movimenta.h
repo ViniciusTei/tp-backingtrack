@@ -9,11 +9,19 @@ typedef struct Posicao {
   int y;
 } Posicao;
 
+typedef struct Analise {
+  int chamadasRecursivas;
+  int nivelMaximoRecursao; // otaldo pico
+  int auxNivelMaximoRecursao;
+} Analise;
+
 void encontraPosicaoInicial(Mapa *mapa, Posicao *posicaoEncontrada);
-void movimenta(Mapa *mapa, ListaPersonagens *personagens);
+void movimenta(Mapa *mapa, ListaPersonagens *personagens, Analise *var_analise);
 int verificaMovimentoValido(Mapa mapa, Posicao posicaoAtual, Posicao proximaPosicao);
-char verificaSePosicaoTemInimigo(Mapa mapa, Posicao p);
-int backingtrack(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInicial);
+int verificaSePosicaoTemInimigo(Mapa mapa, Posicao p);
+int backingtrack(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInicial, Posicao proximaPosicao, Analise *var_analise);
 int fazMovimento(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInicial, Posicao proximaPosicao);
+void imprimePosicao(Posicao p);
+void imprimeStatusAtualMovimento(Mapa *mapa, PersonagemData Ness);
 
 #endif

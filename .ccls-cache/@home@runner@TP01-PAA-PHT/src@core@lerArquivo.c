@@ -43,7 +43,7 @@ int lerArquivo(char* file_name, ListaPersonagens *personagens, Mapa *mapa) {
 
       fscanf(file, "%d %d", &altura, &largura);
       
-      iniciaMapa(mapa, altura, largura);
+      iniciaMapa(mapa, altura, largura, );
     
       do {
         pLinha = fgets(linha, sizeof(linha), file);

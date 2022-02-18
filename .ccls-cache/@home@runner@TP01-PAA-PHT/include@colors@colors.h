@@ -14,4 +14,8 @@ void purple(); // Roxo
 void cyan(); // Ciano
 void white(); // Branco
 void reset (); // Volta original
+void laranja();
+void marrom();
+void rosa();
+void bgGray();
 #endif
