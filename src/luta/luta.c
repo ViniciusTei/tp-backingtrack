@@ -13,24 +13,17 @@ int luta(ListaPersonagens *lista, char Inimigo) {
   reset();
   // verifica se o valor de p do ness eh suficiente para ganhar
   if (lista->Ness.p > lista->inimigos[inimigoIndex].p) {
-    // printf("Batalha vencida!\n");
-
     // atualiza os valores de Ness
     lista->Ness.p += lista->inimigos[inimigoIndex].k;
     return 1;
   }else{
     //verifica se o ness tem K para usar
-    if (lista->Ness.k > 0) {
-      // printf("Ness usou PK Flash para vencer a batalha!\n");
-      
+    if (lista->Ness.k > 0) {      
       lista->Ness.p += lista->inimigos[inimigoIndex].k;
       lista->Ness.k--;
       return 1;
     }
   }
-
-  // printf("Voce perdeu!");
-
   return -1;
 }
 

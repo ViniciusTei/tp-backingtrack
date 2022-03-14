@@ -202,16 +202,11 @@ int backingtrack(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInici
   */
 int fazMovimento(Mapa *mapa, ListaPersonagens *personagens, Posicao posicaoInicial, Posicao proximaPosicao) {
   if (verificaMovimentoValido(*mapa, posicaoInicial, proximaPosicao) > 0) {
-    //imprimePosicao(proximaPosicao);
-    //sleep(1);
-    //mapaGrafico(*mapa);
     // se a posicao nao for um inimigo nos vamos para a proxima posicao valida
     if (verificaSePosicaoTemInimigo(*mapa, proximaPosicao) == FALSE) return 1;
     
     char inimigo = getPosicao(*mapa, proximaPosicao.x, proximaPosicao.y);
     int resultadoLuta = luta(personagens, inimigo);
-    //sleep(1);
-    //imprimeNessStatus(personagens->Ness);
 
     if (inimigo == 'G' && resultadoLuta == 1) {
       green();
